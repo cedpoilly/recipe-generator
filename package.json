@@ -21,6 +21,8 @@
   },
   "dependencies": {
     "@heroicons/vue": "^2.0.18",
+    "got": "^13.0.0",
+    "h3-formidable": "^0.3.8",
     "openai": "^3.3.0"
   }
 }
