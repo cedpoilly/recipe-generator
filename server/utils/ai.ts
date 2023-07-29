@@ -3,7 +3,7 @@ import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai"
 const config = useRuntimeConfig()
 
 const configuration = new Configuration({
-  apiKey: config.openAi.secretKey,
+  apiKey: process.env.NUXT_OPEN_AI_SECRET_KEY,
 })
 const openai = new OpenAIApi(configuration)
 
