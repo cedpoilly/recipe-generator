@@ -12,6 +12,8 @@ export async function transcribeFile(path: PathLike) {
   let response
   let error
 
+  console.log("Starting transcription...")
+
   try {
     const transcription = await openai.createTranscription(
       // * Casting the stream as `File` as the definition seems wrong (or does work with a stream)
