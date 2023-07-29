@@ -62,7 +62,7 @@ const askQuestion = async () => {
 
       messages.value.push(answer.value)
 
-      requestAndPlayAudio(answer.value.content)
+      requestAndPlayAudio(answer.value.content.trim())
 
       answer.value = null
 
@@ -73,15 +73,25 @@ const askQuestion = async () => {
 
 async function requestAndPlayAudio(text: string) {
   parrotStatus.value = "loading"
-  const response = await $fetch("/api/vocalise", {
-    method: "POST",
-    body: text,
-    responseType: "stream",
-  })
+  let response
+
+  try {
+    response = await $fetch("/api/vocalise", {
+      method: "POST",
+      body: text,
+      responseType: "stream",
+    })
+  } catch (error) {
+    alert("Failed to vocalise the text!")
+    console.error(error)
+    parrotStatus.value = "idle"
+    return
+  }
 
   if (!((response as any) instanceof ReadableStream)) {
     alert(response as unknown as Error)
-    console.log(response)
+    parrotStatus.value = "idle"
+    console.log("Failed response", response)
     return
   }
 
@@ -168,10 +178,7 @@ async function scrollToBottom() {
           placeholder="Write here..."
           @submit="askQuestion"
         />
-        <AudioReaderStatus
-          :state="parrotStatus"
-          class="absolute -top-5 right-6"
-        />
+        <AudioReaderStatus :state="parrotStatus" />
         <BaseButton type="submit">Ask</BaseButton>
       </div>
     </form>

@@ -20,7 +20,14 @@ const resolveStream = async ({
       .replaceAll(/^data: /gm, "")
       .split("\n")
       .filter((c: string) => Boolean(c.length) && c !== "[DONE]")
-      .map((c: string) => JSON.parse(c))
+      .map((c: string) => {
+        try {
+          return JSON.parse(c)
+        } catch (error) {
+          console.error(error)
+          return c
+        }
+      })
 
     for (let chunk of chunks) {
       const content = chunk.choices[0].delta.content

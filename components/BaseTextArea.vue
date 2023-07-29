@@ -6,7 +6,7 @@ type Props = {
 }
 const props = defineProps<Props>()
 
-defineEmits(["update:modelValue"])
+defineEmits(["update:modelValue", "submit"])
 </script>
 
 <template>

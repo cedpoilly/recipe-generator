@@ -22,6 +22,7 @@ const prePrompts: ChatCompletionRequestMessage[] = [
     You will return me with a concise reciepe.
     Do NOT have any text before or after the recipe content.
     The text you send back MUST be smaller than 1024 KB.
+    I am streaming your response so make sure it does not fail. 
     `.trim(),
   },
 ]
