@@ -15,7 +15,7 @@ const messages = ref<Message[]>([])
 const answer = ref<Message | null>()
 
 const audioParrotFile = ref()
-const parrotStatus = ref()
+const parrotStatus = ref<"idle" | "speaking" | "loading">("idle")
 
 const question = ref("")
 
@@ -72,6 +72,7 @@ const askQuestion = async () => {
 }
 
 async function requestAndPlayAudio(text: string) {
+  parrotStatus.value = "loading"
   const response = await $fetch("/api/vocalise", {
     method: "POST",
     body: text,
@@ -97,7 +98,7 @@ async function requestAndPlayAudio(text: string) {
 
   await usePlayTheAudioFile(audioParrotFile.value)
 
-  parrotStatus.value = "sleeping"
+  parrotStatus.value = "idle"
 }
 
 async function scrollToBottom() {
@@ -125,7 +126,7 @@ async function scrollToBottom() {
 
     <ul
       ref="chatList"
-      class="overflow-y-auto scroll-smooth overscroll-y-contain px-2 grid items-start auto-rows-min gap-y-4 pb-4 transition-all duration-700"
+      class="max-w-screen-sm w-full mx-auto overflow-y-auto scroll-smooth overscroll-y-contain px-2 grid items-start auto-rows-min gap-y-4 pb-4 transition-all duration-700"
     >
       <ChatLine
         :role="message.role"
@@ -158,7 +159,7 @@ async function scrollToBottom() {
       </Transition>
 
       <div
-        class="w-full grid grid-cols-[1fr_auto] p-4 items-end gap-x-4 bg-slate-800"
+        class="w-full relative grid grid-cols-[1fr_auto] p-4 items-end gap-x-4 bg-slate-800"
       >
         <BaseTextArea
           v-model="question"
@@ -166,6 +167,10 @@ async function scrollToBottom() {
           label="Enter your message here"
           placeholder="Write here..."
           @submit="askQuestion"
+        />
+        <AudioReaderStatus
+          :state="parrotStatus"
+          class="absolute -top-5 right-6"
         />
         <BaseButton type="submit">Ask</BaseButton>
       </div>
