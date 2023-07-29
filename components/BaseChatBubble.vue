@@ -12,7 +12,7 @@ const props = defineProps<Props>()
     :class="
       props.isAssistant ? 'chat-bubble-neutral-focus' : 'chat-bubble-primary'
     "
-    class="chat-bubble text-slate-50"
+    class="chat-bubble text-slate-50 whitespace-pre-wrap"
   >
     {{ props.content }}
   </div>
