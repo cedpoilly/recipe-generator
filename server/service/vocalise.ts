@@ -6,6 +6,8 @@ import { pipeline } from "node:stream/promises"
 import { createWriteStream } from "fs"
 
 export default async function read(input: string, filename: string) {
+  console.log("vocalising")
+
   return await pipeline(
     Readable.from([input]),
     got.stream.post(
