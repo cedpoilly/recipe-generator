@@ -7,7 +7,9 @@ type Message = {
   content: string
 }
 
-const questionAksked = ref(false)
+const questionAsked = ref(false)
+
+const shouldVocaliseSound = ref(false)
 
 const chatList = ref<HTMLUListElement>()
 
@@ -25,7 +27,7 @@ const askQuestion = async () => {
     content: question.value,
   })
 
-  questionAksked.value = true
+  questionAsked.value = true
 
   scrollToBottom()
 
@@ -62,7 +64,9 @@ const askQuestion = async () => {
 
       messages.value.push(answer.value)
 
-      requestAndPlayAudio(answer.value.content.trim())
+      if (shouldVocaliseSound.value) {
+        requestAndPlayAudio(answer.value.content.trim())
+      }
 
       answer.value = null
 
@@ -157,7 +161,7 @@ async function scrollToBottom() {
       @submit.prevent="askQuestion"
     >
       <Transition name="appear">
-        <div v-if="!questionAksked" class="px-2">
+        <div v-if="!questionAsked" class="px-2">
           <p
             class="bg-teal-900/40 mb-2 outline-2 outline-slate-50/50 h-fit py-4 -outline-offset-[8px] outline-dashed px-6 rounded-lg flex items-center"
           >
@@ -179,7 +183,14 @@ async function scrollToBottom() {
           @submit="askQuestion"
         />
         <AudioReaderStatus :state="parrotStatus" />
-        <BaseButton type="submit">Ask</BaseButton>
+
+        <div class="grid items-stretch">
+          <VocaliseToggle
+            title="Click to activate or deactivate vocalisation."
+            @change="shouldVocaliseSound = !shouldVocaliseSound"
+          />
+          <SendButton type="submit">Ask</SendButton>
+        </div>
       </div>
     </form>
   </div>

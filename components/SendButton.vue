@@ -7,5 +7,3 @@ import { PaperAirplaneIcon } from "@heroicons/vue/20/solid"
     <PaperAirplaneIcon class="h-8 w-8" />
   </button>
 </template>
-
-<style scoped></style>
